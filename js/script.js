@@ -7,6 +7,7 @@
 
 var newColour = [];
 var format = 'hex';
+var selected = 0;
 
 function changeColorFormat() {
     format = document.querySelector('input[type="radio"]:checked').value;
@@ -25,6 +26,7 @@ function genColor() {
 }
 
 function changeColour(num) {
+    selected = num;
     if (num != -1) {
         new_color = newColour[num];
         //outline();  either use the fn or just write the code here.
@@ -50,7 +52,7 @@ function formatColor(color) {
 }
 
 function toast(yo) {
-    yo.setAttribute("data-clipboard-text", formatColor(newColour[0]));
+    yo.setAttribute("data-clipboard-text", formatColor(newColour[selected]));
     document.getElementById("toast").innerHTML = yo.getAttribute("data-clipboard-text") + " copied to clipboard.";
 }
 
@@ -70,6 +72,25 @@ function start() {
     changeColour(-1);
 }
 
+function keyNav(dir){
+    switch(dir){
+        case "right":
+        if (selected < newColour.length -1){
+        changeColour(selected + 1);
+        document.getElementById('c'+(selected)).focus();
+        }
+        break;
+
+        case "left":
+        if (selected > 0){
+        changeColour(selected - 1);
+        document.getElementById('c'+(selected)).focus();
+        }
+        break;
+    }
+
+}
+
 document.onkeydown = function(e) {
     switch (e.keyCode) {
         case 82:
@@ -84,6 +105,17 @@ document.onkeydown = function(e) {
         case 65:
         var color = document.getElementById('copyall');
         copyAll(color)
+        break;
+
+        //added arrow key nav here
+        //right
+        case 39:
+        keyNav("right");
+        break;
+
+        //right
+        case 37:
+        keyNav("left");
         break;
     }
 };
